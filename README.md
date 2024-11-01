@@ -42,6 +42,9 @@
   - 本拡張機能の使用は自己責任となります
   - 開発者は本拡張機能の使用に起因するいかなる損害や問題についても責任を負いません
 
+3. 宗教
+  - 開発にはAI、LLM使いまくりなので嫌な人は避けて
+
 ## ハッシュタグ自動追加モード
 ![8](https://github.com/user-attachments/assets/da336d10-15bc-46b5-878f-38a8dc28634e)
 ![9](https://github.com/user-attachments/assets/fe67cd9d-1e40-4929-9bb1-6262cbf9eec8)
