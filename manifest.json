@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "令和最新版コンテンツ入門2024カウンター",
+    "version": "1.0",
+    "description": "☆5 この製品は完ぺきに動作します 問題があれば私たちのX@nukkonukko11,もしくはメールアドレスに連絡ください hello[at]mizuame.works",
+    "permissions": [
+      "storage",
+      "scripting"
+    ],
+    "host_permissions": [
+      "https://twitter.com/*",
+      "https://x.com/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://twitter.com/*", "https://x.com/*"],
+        "js": ["content.js"]
+      }
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }

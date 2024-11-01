@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    button {
+      background-color: #1da1f2;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1991db;
+    }
+    #currentCount {
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
+    }
+    .user-settings {
+      background-color: #f8f9fa;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .user-settings label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .status {
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      display: none;
+    }
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .auto-hashtag, .always-show-counter {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>ツイートカウンターコントロール</h3>
+    
+    <div class="user-settings">
+      <label for="userId">あなたのTwitter/X ID:</label>
+      <input type="text" id="userId" placeholder="例: nukkonukko11">
+      <button id="saveUserId">IDを保存</button>
+      <div id="saveStatus" class="status"></div>
+    </div>
+
+    <div class="auto-hashtag">
+      <label>
+        <input type="checkbox" id="autoHashtagMode">
+        ハッシュタグ自動追加モード
+      </label>
+    </div>
+
+    <div class="always-show-counter">
+      <label>
+        <input type="checkbox" id="alwaysShowCounter">
+        カウンター常時表示
+      </label>
+    </div>
+
+    <div id="currentCount">ツイート数: 0</div>
+    
+    <div class="view-list">
+      <button id="viewList">ツイート一覧を見る</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
