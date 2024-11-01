@@ -10,6 +10,11 @@
 ### 1. chrome://extensions/ にアクセスし、有効化
 ![1](https://github.com/user-attachments/assets/c69094bc-fec3-4234-8068-68937236ce4a)
 
+![Advance1](https://github.com/user-attachments/assets/e8e8d329-f2d2-43d0-aec0-ad7319add7af)
+![Advance2](https://github.com/user-attachments/assets/a926d017-5365-40f7-a2e6-e4089bf8d274)
+
+右上のデベロッパーモードをonにし、パッケージ化されていない拡張機能を読み込むから追加
+
 ### 2. 拡張をクリック
 ![2](https://github.com/user-attachments/assets/51833a59-14ea-4d47-8184-302db4507e8c)
 
