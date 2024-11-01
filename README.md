@@ -2,6 +2,11 @@
 
 ## ☆5 この製品は完ぺきに動作します
 
+### 0.git cloneするか code→download zipでダウンロードし、解凍
+
+![10](https://github.com/user-attachments/assets/e4f37902-5889-4bb1-84c6-8ca7ca2120d5)
+
+
 ### 1. chrome://extensions/ にアクセスし、有効化
 ![1](https://github.com/user-attachments/assets/c69094bc-fec3-4234-8068-68937236ce4a)
 
