@@ -2,7 +2,7 @@
 
 ## ☆5 この製品は完ぺきに動作します
 
-### 0.git cloneするか code→download zipでダウンロードし、解凍
+### 0.git clone or releaseからダウンロード。2024/11/06現在最新版は[ここからダウンロード可能](https://github.com/mizuamedesu/Content2024Extension/archive/refs/tags/v1.1.0.zip)
 
 ![10](https://github.com/user-attachments/assets/e4f37902-5889-4bb1-84c6-8ca7ca2120d5)
 
