@@ -1,3 +1,5 @@
+// content.js
+
 console.log('Content script loaded');
 
 let configuredUserId = null;
@@ -6,9 +8,11 @@ let isProcessing = false;
 let autoHashtagMode = false;
 let lastInsertedTweet = null;
 let alwaysShowCounter = false;
+let enableCustomQuery = false;
+let customQuery = null;
 let tweetCounter = 0;
 
-// カウンターの期間をコンピューターの日付の00:00~23:59に設定
+// カウンターの期間
 let countStartDateTime = null;
 let countEndDateTime = null;
 
@@ -23,6 +27,8 @@ async function loadStoredData() {
             'processedTweetIds',
             'autoHashtagMode',
             'alwaysShowCounter',
+            'enableCustomQuery',
+            'customQuery',
             'tweetCounter'
         ]);
         configuredUserId = settings.userId;
@@ -31,16 +37,23 @@ async function loadStoredData() {
         }
         autoHashtagMode = settings.autoHashtagMode || false;
         alwaysShowCounter = settings.alwaysShowCounter || false;
+        enableCustomQuery = settings.enableCustomQuery || false;
+        customQuery = settings.customQuery || null;
         tweetCounter = settings.tweetCounter || 0;
 
-        // カウント期間を今日の00:00~23:59に設定
-        updateCountDateTime();
+        // カウント期間を設定
+        setCountDateTime();
 
         console.log('Loaded user ID:', configuredUserId);
         console.log('Loaded processed tweet count:', processedTweetIds.size);
         console.log('Auto Hashtag Mode:', autoHashtagMode);
         console.log('Always Show Counter:', alwaysShowCounter);
-        console.log('Count Period:', countStartDateTime, '-', countEndDateTime);
+        console.log('Custom Query Enabled:', enableCustomQuery);
+        if (enableCustomQuery && customQuery) {
+            console.log('Custom Query Period:', customQuery.startDateTime, '-', customQuery.endDateTime);
+        } else {
+            console.log('Count Period:', countStartDateTime, '-', countEndDateTime);
+        }
 
         if (alwaysShowCounter) {
             showTweetCounterOverlay();
@@ -54,11 +67,17 @@ async function loadStoredData() {
     }
 }
 
-// カウンター期間を今日の00:00~23:59に更新
-function updateCountDateTime() {
-    let today = new Date();
-    countStartDateTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
-    countEndDateTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+// カウンター期間を設定
+function setCountDateTime() {
+    if (enableCustomQuery && customQuery) {
+        countStartDateTime = new Date(customQuery.startDateTime);
+        countEndDateTime = new Date(customQuery.endDateTime);
+    } else {
+        // デフォルト: 今日の00:00~23:59
+        let today = new Date();
+        countStartDateTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+        countEndDateTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+    }
 }
 
 // ハッシュタグを取得
@@ -182,7 +201,14 @@ function navigateToSearchPage() {
     if (!configuredUserId) return;
 
     const encodedUserId = encodeURIComponent(configuredUserId);
-    const searchQuery = `from%3A${encodedUserId}+コンテンツ入門2024`;
+    let searchQuery = `from%3A${encodedUserId}+コンテンツ入門2024`;
+
+    if (enableCustomQuery && customQuery) {
+        const start = encodeURIComponent(customQuery.startDateTime);
+        const end = encodeURIComponent(customQuery.endDateTime);
+        searchQuery += `+since%3A${start}+until%3A${end}`;
+    }
+
     const searchUrl = `https://x.com/search?q=${searchQuery}&src=recent_search_click&f=live`;
 
     window.location.href = searchUrl;
@@ -191,7 +217,7 @@ function navigateToSearchPage() {
 // ツイートカウンターを再計算
 async function recalculateTweetCounter() {
     // カウント期間を更新
-    updateCountDateTime();
+    setCountDateTime();
 
     const data = await chrome.storage.local.get(['tweets']);
     const allTweets = data.tweets || [];
@@ -299,7 +325,7 @@ async function processTweet(tweet) {
                     const tweetTimeObj = new Date(tweetTime);
 
                     if (isDateTimeInRange(tweetTimeObj, countStartDateTime, countEndDateTime)) {
-                        tweetCounter = response.tweetCounter;
+                        tweetCounter += 1;
                         console.log('Tweet processed and counted:', {
                             id: tweetId,
                             rawDataSize: rawData.tweetContent.length
@@ -310,6 +336,7 @@ async function processTweet(tweet) {
                         });
                     }
 
+                    await chrome.storage.local.set({ tweetCounter });
                     updateTweetCounterOverlay();
                 }
             } catch (error) {
@@ -358,6 +385,7 @@ function observeTweets() {
 console.log('Initializing content script');
 loadStoredData().then(() => {
     observeTweets();
+    recalculateTweetCounter(); // 初期カウンターの再計算
 }).catch(console.error);
 
 // 設定変更のリスナー
@@ -389,9 +417,34 @@ chrome.storage.onChanged.addListener((changes) => {
             removeTweetCounterOverlay();
         }
     }
+    if (changes.enableCustomQuery) {
+        enableCustomQuery = changes.enableCustomQuery.newValue;
+        console.log('Enable Custom Query updated:', enableCustomQuery);
+        setCountDateTime();
+        recalculateTweetCounter();
+    }
+    if (changes.customQuery) {
+        customQuery = changes.customQuery.newValue || null;
+        console.log('Custom Query updated:', customQuery);
+        setCountDateTime();
+        recalculateTweetCounter();
+    }
     if (changes.tweetCounter) {
         tweetCounter = changes.tweetCounter.newValue || 0;
         console.log('Tweet Counter updated:', tweetCounter);
         updateTweetCounterOverlay();
+    }
+});
+
+// カウンター期間が変わった場合に再計算を要求
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === 'RECALCULATE_COUNTER') {
+        recalculateTweetCounter().then(() => {
+            sendResponse({ success: true });
+        }).catch(error => {
+            console.error('Error recalculating counter:', error);
+            sendResponse({ success: false });
+        });
+        return true; // 非同期レスポンス
     }
 });
