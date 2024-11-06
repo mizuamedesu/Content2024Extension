@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <style>
+    /* 既存のスタイルを維持 */
     body {
       width: 300px;
       padding: 10px;
@@ -41,7 +42,7 @@
       margin-bottom: 5px;
       font-weight: bold;
     }
-    input[type="text"] {
+    input[type="text"], input[type="datetime-local"] {
       width: 100%;
       padding: 8px;
       border: 1px solid #ccc;
@@ -58,8 +59,17 @@
       background-color: #d4edda;
       color: #155724;
     }
-    .auto-hashtag, .always-show-counter {
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .auto-hashtag, .always-show-counter, .custom-query {
       margin-top: 10px;
+    }
+    .custom-query-fields {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
     }
   </style>
 </head>
@@ -86,6 +96,22 @@
         <input type="checkbox" id="alwaysShowCounter">
         カウンター常時表示
       </label>
+    </div>
+    
+    <div class="custom-query">
+      <label>
+        <input type="checkbox" id="enableCustomQuery">
+        カスタムクエリーを有効にする
+      </label>
+      <div class="custom-query-fields" id="customQueryFields">
+        <label for="startDateTime">開始日時:</label>
+        <input type="datetime-local" id="startDateTime">
+        
+        <label for="endDateTime">終了日時:</label>
+        <input type="datetime-local" id="endDateTime">
+        
+        <button id="saveCustomQuery">期間を保存</button>
+      </div>
     </div>
 
     <div id="currentCount">ツイート数: 0</div>
