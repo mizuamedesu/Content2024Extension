@@ -2,7 +2,7 @@
 
 ## ☆5 この製品は完ぺきに動作します
 
-### 0.git clone or releaseからダウンロード。2024/11/06現在最新版は[ここからダウンロード可能](https://github.com/mizuamedesu/Content2024Extension/archive/refs/tags/v1.1.0.zip)
+### 0.git clone or releaseからダウンロード。2024/11/15現在最新版は[ここからダウンロード可能](https://github.com/mizuamedesu/Content2024Extension/archive/refs/tags/v1.1.1.zip)
 
 ![10](https://github.com/user-attachments/assets/e4f37902-5889-4bb1-84c6-8ca7ca2120d5)
 
@@ -41,6 +41,7 @@
 ![8](https://github.com/user-attachments/assets/72bbc449-78d2-4ddc-9b29-a291411d821c)
 
 カスタムクエリーを有効にするのボタンを押すと、左下に常時表示されているカウンターと拡張機能を押した時に表示されるカウント数を日付で指定可能。オフの時はその日の00:00~23:59にツイートされたものがカウントされているはず。
+(色々挙動が怪しいのでおまけ程度で考えてください。無効推奨)
 
 ## 注意事項
 1. APIリクエストベースの動作について
